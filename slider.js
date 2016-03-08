@@ -7,7 +7,7 @@
 var app = angular.module('ionSlider',['ngRoute']);
 
 
-app.directive('ionslider',function($timeout){
+app.directive('ionslider', ['$timeout', function($timeout){
     return{
         restrict:'E',
         scope:{min:'=',
@@ -65,4 +65,4 @@ app.directive('ionslider',function($timeout){
             });
         }
     }
-});
+}]);
