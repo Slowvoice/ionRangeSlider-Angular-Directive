@@ -4,11 +4,11 @@
  * Modified and enhanced by Juergen Wahlmann on 3/5/15
  */
 
-var app = angular.module('ionSlider',['ngRoute']);
-
+var app = angular.module('ionSlider',[]);
 
 app.directive('ionslider', ['$timeout', function($timeout){
-    return{
+    return {
+        require:'?ngModel',
         restrict:'E',
         scope:{min:'=',
             max:'=',
@@ -22,7 +22,6 @@ app.directive('ionslider', ['$timeout', function($timeout){
             step:'@',
             hideMinMax:'@',
             hideFromTo:'@',
-            from:'=',
             disable:'=',
             onChange:'=',
             onFinish:'='
@@ -30,7 +29,7 @@ app.directive('ionslider', ['$timeout', function($timeout){
         },
         template:'<div></div>',
         replace:true,
-        link:function($scope,$element,attrs){
+        link:function($scope,$element,attrs,ngModel){
             (function init(){
                 $element.ionRangeSlider({
                     min: $scope.min,
@@ -45,20 +44,22 @@ app.directive('ionslider', ['$timeout', function($timeout){
                     step:$scope.step,
                     hideMinMax:$scope.hideMinMax,
                     hideFromTo:$scope.hideFromTo,
-                    from:$scope.from,
                     disable:$scope.disable,
                     onChange:$scope.onChange,
                     onFinish:$scope.onFinish
                 });
             })();
+            ngModel.$render = function() {
+                $timeout(function(){ $element.data("ionRangeSlider").update({from: ngModel.$viewValue}); });
+            };
+            $element.on('change', function() {
+                ngModel.$setViewValue($element.data('from'));
+            });
             $scope.$watch('min', function(value) {
                 $timeout(function(){ $element.data("ionRangeSlider").update({min: value}); });
             },true);
             $scope.$watch('max', function(value) {
                 $timeout(function(){ $element.data("ionRangeSlider").update({max: value}); });
-            });
-            $scope.$watch('from', function(value) {
-                $timeout(function(){ $element.data("ionRangeSlider").update({from: value}); });
             });
             $scope.$watch('disable', function(value) {
                 $timeout(function(){ $element.data("ionRangeSlider").update({disable: value}); });
