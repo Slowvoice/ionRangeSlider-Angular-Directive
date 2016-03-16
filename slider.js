@@ -53,7 +53,7 @@ app.directive('ionslider', ['$timeout', function($timeout){
                 $timeout(function(){ $element.data("ionRangeSlider").update({from: ngModel.$viewValue}); });
             };
             $element.on('change', function() {
-                ngModel.$setViewValue($element.data('from'));
+                $timeout(function(){ ngModel.$setViewValue($element.data('from')) });
             });
             $scope.$watch('min', function(value) {
                 $timeout(function(){ $element.data("ionRangeSlider").update({min: value}); });
